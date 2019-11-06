@@ -1,3 +1,5 @@
+[![TravisCI Build Status](https://api.travis-ci.org/mlocati/timezone-converter.svg?branch=master)](https://travis-ci.org/mlocati/timezone-converter)
+
 # timezone-converter
 
 ## Project setup
