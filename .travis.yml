@@ -6,8 +6,6 @@ branches:
 
 cache:
   npm: true
-  directories:
-    - node_modules
 
 notifications:
   email: false
