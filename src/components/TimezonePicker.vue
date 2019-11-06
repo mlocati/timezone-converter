@@ -45,7 +45,7 @@ interface ISelectItem {
 @Component
 export default class TimezonePicker extends Vue {
   readonly NO_GROUP_TEXT: string = '- others -'
-  readonly SELECT_SIZE: number = 20
+  readonly SELECT_SIZE: number = 16
 
   @Prop()
   private visible!: boolean
