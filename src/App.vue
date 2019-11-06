@@ -1,58 +1,78 @@
 <template>
-  <div id="app">
-    <TopBar />
-    <div class="container-fluid mt-3">
-      <b-card-group deck>
-        <DateTimeViewer
-          title="Source time zone"
-          :timezone="sourceTimezone"
-          :timestamp="timestamp"
-        >
-          <template v-slot:action>
-            <b-button
-              size="sm"
-              class="my-2 my-sm-0"
-              variant="success"
-              @click.prevent="configure"
-            >
-              <font-awesome-icon icon="edit" />
-              Change
-            </b-button>
-          </template>
-        </DateTimeViewer>
-        <DateTimeViewer
-          title="Your time zone"
-          :timezone="localTimezone"
-          :timestamp="timestamp"
-        />
-        <DateTimeViewer
-          v-for="(otherTimezone, otherTimezoneIndex) in otherTimezones"
-          :key="otherTimezone + '@' + otherTimezoneIndex"
-          title="Custom time zone"
-          :timezone="otherTimezone"
-          :timestamp="timestamp"
-        >
-          <template v-slot:action>
-            <b-button
-              size="sm"
-              class="my-2 my-sm-0"
-              variant="danger"
-              @click.prevent="otherTimezones.splice(otherTimezoneIndex, 1)"
-            >
-              <font-awesome-icon icon="trash-alt" />
-              Remove
-            </b-button>
-          </template>
-        </DateTimeViewer>
-        <b-card
-          class="text-center add-timezone"
-          border-variant="light"
-          @click.prevent="pickTimezone"
-        >
-          +
-        </b-card>
-      </b-card-group>
-    </div>
+  <div
+    id="app"
+    class="h-100 d-flex flex-column"
+  >
+    <header class="mb-auto">
+      <TopBar />
+    </header>
+    <main>
+      <div class="container-fluid mt-3">
+        <b-card-group deck>
+          <DateTimeViewer
+            title="Source time zone"
+            :timezone="sourceTimezone"
+            :timestamp="timestamp"
+          >
+            <template v-slot:action>
+              <b-button
+                size="sm"
+                class="my-2 my-sm-0"
+                variant="success"
+                @click.prevent="configure"
+              >
+                <font-awesome-icon icon="edit" />
+                Change
+              </b-button>
+            </template>
+          </DateTimeViewer>
+          <DateTimeViewer
+            title="Your time zone"
+            :timezone="localTimezone"
+            :timestamp="timestamp"
+          />
+          <DateTimeViewer
+            v-for="(otherTimezone, otherTimezoneIndex) in otherTimezones"
+            :key="otherTimezone + '@' + otherTimezoneIndex"
+            title="Custom time zone"
+            :timezone="otherTimezone"
+            :timestamp="timestamp"
+          >
+            <template v-slot:action>
+              <b-button
+                size="sm"
+                class="my-2 my-sm-0"
+                variant="danger"
+                @click.prevent="removeOtherTimezoneAt(otherTimezoneIndex)"
+              >
+                <font-awesome-icon icon="trash-alt" />
+                Remove
+              </b-button>
+            </template>
+          </DateTimeViewer>
+          <b-card
+            class="text-center add-timezone"
+            border-variant="light"
+            @click.prevent="pickTimezone"
+          >
+            +
+          </b-card>
+        </b-card-group>
+      </div>
+    </main>
+    <footer class="footer mt-auto py-3">
+      <div class="container-fluid">
+        <div class="text-right">
+          <b-button
+            :variant="copyButtonVariant"
+            @click.prevent="copyUrl"
+          >
+            <font-awesome-icon icon="copy" />
+            Copy URL
+          </b-button>
+        </div>
+      </div>
+    </footer>
     <Configurer
       :timezone="sourceTimezone"
       :timestamp="timestamp"
@@ -77,6 +97,7 @@ import * as Configurer from './components/Configurer.vue'
 import TimezonePicker from './components/TimezonePicker.vue'
 import * as Timezone from './Timezone'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import copy from 'clipboard-copy'
 
 @Component({
   components: {
@@ -92,6 +113,7 @@ export default class App extends Vue {
   otherTimezones: string[] = []
   configuring: boolean = false
   pickingTimezone: boolean = false
+  copyButtonVariant: string = 'info'
   private _mounted: boolean = false
   beforeMount () {
     this.locationHashChanged()
@@ -138,12 +160,34 @@ export default class App extends Vue {
   public pickTimezone () : void {
     this.pickingTimezone = true
   }
-  public timezonePicked (timezone: string) :void {
+  public timezonePicked (timezone: string): void {
     if (this.otherTimezones.indexOf(timezone) >= 0) {
       return
     }
     this.otherTimezones.push(timezone)
     this.updateLocationHash()
+  }
+  public removeOtherTimezoneAt (otherTimezoneIndex: number): void {
+    this.otherTimezones.splice(otherTimezoneIndex, 1)
+    this.updateLocationHash()
+  }
+  public copyUrl () : void {
+    copy(window.location.href)
+      .then(() => {
+        this.copyButtonVariant = 'success'
+      })
+      .catch((reason: any): void => {
+        this.copyButtonVariant = 'danger'
+        window.alert('Copy failed:' + (reason ? reason.toString() : 'unknown reason'))
+      })
+      .finally((): void => {
+        setTimeout(
+          () => {
+            this.copyButtonVariant = 'info'
+          },
+          1500
+        )
+      })
   }
 }
 </script>

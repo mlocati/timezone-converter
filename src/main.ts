@@ -2,7 +2,7 @@ import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import App from './App.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faGlobe, faCrosshairs, faCalendarDay, faClock, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { faGlobe, faCrosshairs, faCalendarDay, faClock, faEdit, faTrashAlt, faCopy } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText } from '@fortawesome/vue-fontawesome'
 
 import './main.scss'
@@ -17,7 +17,8 @@ library.add(
   faCalendarDay,
   faClock,
   faEdit,
-  faTrashAlt
+  faTrashAlt,
+  faCopy
 )
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
