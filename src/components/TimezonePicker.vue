@@ -64,7 +64,7 @@ export default class TimezonePicker extends Vue {
   get groupOptions (): ISelectItem[] {
     const result : ISelectItem[] = []
     let hasOthers: boolean = false
-    Timezone.groups.forEach((group: string): void => {
+    Timezone.getGroups().forEach((group: string): void => {
       if (group === '') {
         hasOthers = true
       } else {
@@ -79,8 +79,9 @@ export default class TimezonePicker extends Vue {
 
   get timezoneOptions (): ISelectItem[] {
     const result: ISelectItem[] = []
-    if (Timezone.timezonesForGroup.hasOwnProperty(this.selectedTimezoneGroup)) {
-      Timezone.timezonesForGroup[this.selectedTimezoneGroup].forEach((timezone: Timezone.Timezone) => {
+    const grouped = Timezone.getGroupedTimezones()
+    if (grouped.hasOwnProperty(this.selectedTimezoneGroup)) {
+      grouped[this.selectedTimezoneGroup].forEach((timezone: Timezone.Timezone) => {
         result.push({ value: timezone.id, text: timezone.locality })
       })
     }
