@@ -1,7 +1,7 @@
 <template>
   <b-modal
     id="modal-pick-time-zone"
-    title="Choose a time zone"
+    :title="$t('Choose a time zone')"
     centered
     no-fade
     @ok="emitResult"
@@ -44,8 +44,11 @@ interface ISelectItem {
 
 @Component
 export default class TimezonePicker extends Vue {
-  readonly NO_GROUP_TEXT: string = '- others -'
   readonly SELECT_SIZE: number = 16
+
+  get NO_GROUP_TEXT (): string {
+    return this.$i18n.t('- others -') as string
+  }
 
   @Prop()
   private visible!: boolean

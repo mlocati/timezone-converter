@@ -10,7 +10,7 @@
       <div class="container-fluid mt-3">
         <b-card-group deck>
           <DateTimeViewer
-            title="Source time zone"
+            :title="$t('Source time zone')"
             :timezone="sourceTimezone"
             :timestamp="timestamp"
           >
@@ -22,19 +22,19 @@
                 @click.prevent="configure"
               >
                 <font-awesome-icon icon="edit" />
-                Change
+                {{ $t('Edit') }}
               </b-button>
             </template>
           </DateTimeViewer>
           <DateTimeViewer
-            title="Your time zone"
+            :title="$t('Your time zone')"
             :timezone="localTimezone"
             :timestamp="timestamp"
           />
           <DateTimeViewer
             v-for="(otherTimezone, otherTimezoneIndex) in otherTimezones"
             :key="otherTimezone + '@' + otherTimezoneIndex"
-            title="Custom time zone"
+            :title="$t('Custom time zone')"
             :timezone="otherTimezone"
             :timestamp="timestamp"
           >
@@ -46,7 +46,7 @@
                 @click.prevent="removeOtherTimezoneAt(otherTimezoneIndex)"
               >
                 <font-awesome-icon icon="trash-alt" />
-                Remove
+                {{ $t('Remove') }}
               </b-button>
             </template>
           </DateTimeViewer>
@@ -68,7 +68,7 @@
             @click.prevent="copyUrl"
           >
             <font-awesome-icon icon="copy" />
-            Copy URL
+            {{ $t('Copy URL') }}
           </b-button>
         </div>
       </div>
@@ -98,6 +98,7 @@ import TimezonePicker from './components/TimezonePicker.vue'
 import * as Timezone from './Timezone'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import copy from 'clipboard-copy'
+import moment from 'moment-timezone'
 
 @Component({
   components: {
@@ -115,6 +116,10 @@ export default class App extends Vue {
   pickingTimezone: boolean = false
   copyButtonVariant: string = 'info'
   private _mounted: boolean = false
+  beforeCreate () {
+    document.documentElement.lang = this.$i18n.locale
+    moment.locale(this.$i18n.locale)
+  }
   beforeMount () {
     this.locationHashChanged()
   }
@@ -178,7 +183,7 @@ export default class App extends Vue {
       })
       .catch((reason: any): void => {
         this.copyButtonVariant = 'danger'
-        window.alert('Copy failed:' + (reason ? reason.toString() : 'unknown reason'))
+        window.alert(this.$i18n.t('Copy failed: {reason}', { reason: reason ? reason.toString() : this.$i18n.t('unknown reason') }))
       })
       .finally((): void => {
         setTimeout(

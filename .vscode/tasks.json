@@ -1,0 +1,28 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Vue UI",
+            "group": "build",
+            "type": "shell",
+            "command": "vue",
+            "args": [
+                "ui"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Serve",
+            "group": "build",
+            "type": "npm",
+            "script": "serve",
+            "problemMatcher": []
+        },
+        {
+            "label": "Check i18n",
+            "group": "test",
+            "type": "npm",
+            "script": "vue-i18n-extract -- report -v \"src/**/*.vue\" -l \"src/i18n/*.ts\""
+        }
+    ]
+}

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import App from './App.vue'
+import i18n from './i18n'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faGlobe, faCrosshairs, faCalendarDay, faClock, faEdit, faTrashAlt, faCopy } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText } from '@fortawesome/vue-fontawesome'
@@ -26,5 +27,6 @@ Vue.component('font-awesome-layers', FontAwesomeLayers)
 Vue.component('font-awesome-layers-text', FontAwesomeLayersText)
 
 new Vue({
+  i18n,
   render: h => h(App)
 }).$mount('#app')

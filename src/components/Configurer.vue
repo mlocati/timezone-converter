@@ -1,7 +1,7 @@
 <template>
   <b-modal
     id="modal-set-source-datetime"
-    title="Set source date/time"
+    :title="$t('Set source date/time')"
     centered
     no-fade
     @ok="emitResult"
@@ -86,8 +86,6 @@ interface ISelectItem {
 
 @Component
 export default class Configurer extends Vue {
-  readonly NO_GROUP_TEXT: string = '- others -'
-
   @Prop()
   private visible!: boolean
 
@@ -104,6 +102,10 @@ export default class Configurer extends Vue {
   selectedDate: string = ''
 
   selectedTime: string = ''
+
+  get NO_GROUP_TEXT (): string {
+    return this.$i18n.t('- others -') as string
+  }
 
   get groupOptions (): ISelectItem[] {
     const result : ISelectItem[] = []
