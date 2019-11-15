@@ -121,6 +121,7 @@ export default class App extends Vue {
     moment.locale(this.$i18n.locale)
   }
   beforeMount () {
+    document.title = this.$i18n.t('Time Zone Converter') as string
     this.locationHashChanged()
   }
   mounted () {
