@@ -11,7 +11,7 @@ const messages = {
   'it-IT': itIt
 }
 let userLanguage: string
-userLanguage = pickLocale(Object.keys(messages), ['it-Ch'])
+
 if (navigator.languages && navigator.languages) {
   userLanguage = pickLocale(Object.keys(messages), navigator.languages)
 } else if (typeof navigator.language === 'string') {
