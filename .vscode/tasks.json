@@ -1,0 +1,22 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Vue UI",
+            "group": "build",
+            "type": "shell",
+            "command": "vue",
+            "args": [
+                "ui"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Serve",
+            "group": "build",
+            "type": "npm",
+            "script": "serve",
+            "problemMatcher": []
+        }
+    ]
+}
