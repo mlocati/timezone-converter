@@ -6,7 +6,7 @@
       variant="info"
     >
       <b-navbar-brand href="https://github.com/mlocati/timezone-converter">
-        Time Zone Converter
+        {{ $t('Time Zone Converter') }}
       </b-navbar-brand>
     </b-navbar>
   </div>
