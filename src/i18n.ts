@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
+import frFr from './i18n/fr-FR'
 import itIt from './i18n/it-IT'
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons'
 
@@ -8,6 +9,7 @@ const FALLBACK_LOCALE = 'en-US'
 Vue.use(VueI18n)
 
 const messages = {
+  'fr-FR': frFr,
   'it-IT': itIt
 }
 let userLanguage: string
