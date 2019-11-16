@@ -2,6 +2,8 @@
   <b-modal
     id="modal-set-source-datetime"
     :title="$t('Set source date/time')"
+    :ok-title="$t('OK')"
+    :cancel-title="$t('Cancel')"
     centered
     no-fade
     @ok="emitResult"

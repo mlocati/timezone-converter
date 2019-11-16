@@ -10,5 +10,7 @@ export default {
   'Remove': 'Entfernen',
   'Copy URL': 'URL kopieren',
   'Copy failed: {reason}': 'Kopieren fehlgeschlagen: {Grund}',
-  'unknown reason': 'Unbekannter Grund'
+  'unknown reason': 'Unbekannter Grund',
+  'Cancel': 'Abbrechen',
+  'OK': 'OK'
 }

@@ -2,6 +2,8 @@
   <b-modal
     id="modal-pick-time-zone"
     :title="$t('Choose a time zone')"
+    :ok-title="$t('OK')"
+    :cancel-title="$t('Cancel')"
     centered
     no-fade
     @ok="emitResult"

@@ -1,4 +1,3 @@
-
 export default {
   'Time Zone Converter': 'Convertisseur de Fuseau Horaire',
   'Source time zone': 'Fuseau horaire de référence',
@@ -11,5 +10,7 @@ export default {
   'Remove': 'Retirer',
   'Copy URL': 'Copier l\'URL',
   'Copy failed: {reason}': 'Échec de la copie: {raison}',
-  'unknown reason': 'raison inconnue'
+  'unknown reason': 'raison inconnue',
+  'Cancel': 'Annuler',
+  'OK': 'OK'
 }
