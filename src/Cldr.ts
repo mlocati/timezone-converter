@@ -61,6 +61,7 @@ function loadTranslation (locale: string): CldrData {
 const EN_US = loadTranslation('en-US')
 
 const TRANSLATIONS = {
+  'de-DE': loadTranslation('de-DE'),
   'fr-FR': loadTranslation('fr-FR'),
   'it-IT': loadTranslation('it-IT')
 }
