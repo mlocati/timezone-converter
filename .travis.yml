@@ -16,8 +16,6 @@ matrix:
     - name: Check i18n and build output
       language: node_js
       node_js: '10'
-      before_script:
-        - npm install
       script:
         - .travis/check-i18n.sh
         - .travis/build-output.sh
