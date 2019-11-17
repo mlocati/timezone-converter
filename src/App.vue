@@ -98,7 +98,7 @@ import TimezonePicker from './components/TimezonePicker.vue'
 import * as Timezone from './Timezone'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import copy from 'clipboard-copy'
-import moment from 'moment-timezone'
+import EventBus from './EventBus'
 
 @Component({
   components: {
@@ -116,9 +116,7 @@ export default class App extends Vue {
   pickingTimezone: boolean = false
   copyButtonVariant: string = 'info'
   private _mounted: boolean = false
-  beforeCreate () {
-    moment.locale(this.$i18n.locale)
-  }
+  private _freezeLocationHash = false
   beforeMount () {
     document.title = this.$i18n.t('Time Zone Converter') as string
     this.locationHashChanged()
@@ -129,6 +127,15 @@ export default class App extends Vue {
       this._mounted = true
       window.addEventListener('hashchange', () => this.locationHashChanged(), false)
     })
+    EventBus.$on('localeChanged', (): void => {
+      this._freezeLocationHash = true
+      const ts = this.timestamp
+      this.timestamp++
+      this.$nextTick(() : void => {
+        this.timestamp = ts
+        this._freezeLocationHash = false
+      })
+    })
   }
   private locationHashChanged (): void {
     const hashData = LocationHash.fromWindowLocation()
@@ -137,7 +144,9 @@ export default class App extends Vue {
     this.otherTimezones = hashData.otherTimezones
   }
   private updateLocationHash (): void {
-    LocationHash.toWindowLocation(new LocationHash.HashData(this.timestamp, this.sourceTimezone, this.otherTimezones))
+    if (!this._freezeLocationHash) {
+      LocationHash.toWindowLocation(new LocationHash.HashData(this.timestamp, this.sourceTimezone, this.otherTimezones))
+    }
   }
   get localTimezone () {
     return Timezone.MY_TIMEZONE

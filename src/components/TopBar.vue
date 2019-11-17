@@ -57,6 +57,7 @@ span.locale-name {
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { SOURCE_LOCALE, AVAILABLE_LOCALES, getActiveLocale, setActiveLocale } from '../Locale'
 import { translateLanguageName } from '../Cldr'
+import EventBus from '../EventBus'
 
 @Component
 export default class TopBar extends Vue {
@@ -79,6 +80,7 @@ export default class TopBar extends Vue {
   }
   private changeLocale (locale: string): void {
     setActiveLocale(locale)
+    EventBus.$emit('localeChanged')
   }
   public emitConfigure (): void {
     this.$emit('configure')

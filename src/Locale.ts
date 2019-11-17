@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
+import moment from 'moment-timezone'
 
 export const SOURCE_LOCALE = 'en-US'
 
@@ -40,6 +41,7 @@ export function setActiveLocale (newLocale: string): void {
   }
   activeLocale = newLocale
   vueI18n.locale = newLocale
+  moment.locale(newLocale)
   window.document.documentElement.lang = activeLocale
 }
 
@@ -87,3 +89,5 @@ function pickBrowserLocale (browserLocales: ReadonlyArray<string>): string {
 function getInitialActiveLocale (): string {
   return browserLocale
 }
+
+setActiveLocale(activeLocale)
