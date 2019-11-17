@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 import deDe from './i18n/de-DE'
+import elGr from './i18n/el-GR'
 import frFr from './i18n/fr-FR'
 import itIt from './i18n/it-IT'
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons'
@@ -11,6 +12,7 @@ Vue.use(VueI18n)
 
 const messages = {
   'de-DE': deDe,
+  'el-GR': elGr,
   'fr-FR': frFr,
   'it-IT': itIt
 }

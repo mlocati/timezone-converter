@@ -62,6 +62,7 @@ const EN_US = loadTranslation('en-US')
 
 const TRANSLATIONS = {
   'de-DE': loadTranslation('de-DE'),
+  'el-GR': loadTranslation('el-GR'),
   'fr-FR': loadTranslation('fr-FR'),
   'it-IT': loadTranslation('it-IT')
 }
