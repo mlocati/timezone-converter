@@ -38,6 +38,7 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import * as Timezone from '../Timezone'
 import moment from 'moment-timezone'
 import { faGlobe, faCrosshairs, faCalendarDay, faClock } from '@fortawesome/free-solid-svg-icons'
+import EventBus from '../EventBus'
 
 interface ISelectItem {
   value: string
@@ -96,6 +97,18 @@ export default class TimezonePicker extends Vue {
 
   mounted () {
     this.onVisibleChanged(this.visible)
+    EventBus.$on('localeChanged', (): void => {
+      const stz = Timezone.getByID(this.selectedTimezone)
+      this.selectedTimezone = ''
+      this.selectedTimezoneGroup = ''
+      this.$forceUpdate()
+      this.$nextTick((): void => {
+        if (stz !== null) {
+          this.selectedTimezone = stz.id
+          this.selectedTimezoneGroup = stz.group
+        }
+      })
+    })
   }
 
   @Watch('visible')
