@@ -1,3 +1,6 @@
+import { SOURCE_LOCALE } from './Locale'
+import { lang } from 'moment'
+
 interface CldrIdentity {
   version: {
     _number: string
@@ -45,22 +48,39 @@ interface CldrTimeZoneNames {
     }
 }
 
+interface CldrLanguagesData {
+  [languageId: string]: string
+}
+
+interface CldrLanguages {
+  main: {
+      [localeId: string]: {
+        identity: CldrIdentity
+        localeDisplayNames: {
+          languages: CldrLanguagesData
+        }
+      }
+  }
+}
+
 interface CldrData {
   territory: CldrTerritoriesData,
   zone: CldrTimeZoneNamesZone
+  languages?: CldrLanguagesData
 }
 function loadTranslation (locale: string): CldrData {
   const territories = <CldrTerritories>require(`./i18n/cldr/${locale}/territories.json`)
   const timeZoneNames = <CldrTimeZoneNames>require(`./i18n/cldr/${locale}/timeZoneNames.json`)
   return {
     territory: territories.main[locale].localeDisplayNames.territories,
-    zone: timeZoneNames.main[locale].dates.timeZoneNames.zone
+    zone: timeZoneNames.main[locale].dates.timeZoneNames.zone,
+    languages: locale === SOURCE_LOCALE ? undefined : (<CldrLanguages>require(`./i18n/cldr/${locale}/languages.json`)).main[locale].localeDisplayNames.languages
   }
 }
 
 const EN_US = loadTranslation('en-US')
 
-const TRANSLATIONS = {
+const TRANSLATIONS : {[locale: string]: CldrData} = {
   'de-DE': loadTranslation('de-DE'),
   'el-GR': loadTranslation('el-GR'),
   'fr-FR': loadTranslation('fr-FR'),
@@ -91,7 +111,7 @@ export function translateTerritory (nameInEnUs: string, toLocaleId: string): str
 export function translateExemplarCity (id: string, toLocaleId: string): string {
   let data: CldrData
   let result: string = id.replace(/_/g, ' ')
-  if (toLocaleId === 'en_US') {
+  if (toLocaleId === SOURCE_LOCALE) {
     data = EN_US
   } else if (toLocaleId in TRANSLATIONS) {
     data = (<any>TRANSLATIONS)[toLocaleId]
@@ -106,4 +126,31 @@ export function translateExemplarCity (id: string, toLocaleId: string): string {
     return true
   })
   return result
+}
+
+export function translateLanguageName (id: string): string {
+  if (id === SOURCE_LOCALE) {
+    return 'American English'
+  }
+  if (!(id in TRANSLATIONS)) {
+    return id
+  }
+  const translation = TRANSLATIONS[id]
+  const languages = translation.languages
+  if (languages === undefined) {
+    return id
+  }
+  if (id in languages) {
+    return languages[id]
+  }
+  const parts : string[] = id.split('-')
+  const language = parts[0]
+  const territory = parts[1] || ''
+  if (!(language in languages)) {
+    return id
+  }
+  if (territory in translation.territory) {
+    return `${languages[language]} (${translation.territory[territory]})`
+  }
+  return `${languages[language]} (${territory})`
 }

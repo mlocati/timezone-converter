@@ -117,7 +117,6 @@ export default class App extends Vue {
   copyButtonVariant: string = 'info'
   private _mounted: boolean = false
   beforeCreate () {
-    document.documentElement.lang = this.$i18n.locale
     moment.locale(this.$i18n.locale)
   }
   beforeMount () {
