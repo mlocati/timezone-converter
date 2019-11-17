@@ -34,7 +34,7 @@ span.locale-name {
               </span>
             </template>
             <b-dropdown-item
-              v-for="locale in otherAvailableLocales"
+              v-for="locale in getOtherAvailableLocales()"
               :key="locale"
               @click.prevent="changeLocale(locale)"
             >
@@ -61,7 +61,7 @@ import { translateLanguageName } from '../Cldr'
 @Component
 export default class TopBar extends Vue {
   @Prop() private msg!: string
-  private get otherAvailableLocales (): ReadonlyArray<string> {
+  private getOtherAvailableLocales (): ReadonlyArray<string> {
     const locale = getActiveLocale()
     if (locale === SOURCE_LOCALE) {
       return AVAILABLE_LOCALES
