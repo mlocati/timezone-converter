@@ -22,7 +22,7 @@
             "label": "Check i18n",
             "group": "test",
             "type": "npm",
-            "script": "vue-i18n-extract -- report -v \"src/**/*.vue\" -l \"src/i18n/*.ts\""
+            "script": "vue-i18n-extract -- report -v \"src/**/*.vue\" -l \"src/i18n/*.json\""
         }
     ]
 }

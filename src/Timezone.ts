@@ -1,5 +1,6 @@
 import moment, { locale } from 'moment-timezone'
 import { translateTerritory, translateExemplarCity } from './Cldr'
+import { getActiveLocale } from './Locale'
 
 function toDisplayName (name: string): string {
   return name.replace(/_/g, ' ')
@@ -28,7 +29,7 @@ export class Timezone {
     this.localizations = {}
   }
   private get localization (): TimezoneLocalizedData {
-    const localeId = window.document.documentElement.lang
+    const localeId = getActiveLocale()
     if (!(localeId in this.localizations)) {
       const group = this.territoryId === '' ? '' : translateTerritory(this.territoryId, localeId)
       const locality = translateExemplarCity(this.exemplarCityId, localeId)
