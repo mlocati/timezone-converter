@@ -110,6 +110,7 @@ import EventBus from './EventBus'
 })
 export default class App extends Vue {
   sourceTimezone: string = ''
+  localTimezone: string = Timezone.MY_TIMEZONE
   timestamp: number = Number.MIN_VALUE
   otherTimezones: string[] = []
   configuring: boolean = false
@@ -129,10 +130,18 @@ export default class App extends Vue {
     })
     EventBus.$on('localeChanged', (): void => {
       this._freezeLocationHash = true
+      const stz = this.sourceTimezone
       const ts = this.timestamp
+      const otz = this.otherTimezones
+      this.sourceTimezone = 'UTC'
+      this.localTimezone = 'UTC'
       this.timestamp++
+      this.otherTimezones = []
       this.$nextTick(() : void => {
+        this.localTimezone = Timezone.MY_TIMEZONE
+        this.sourceTimezone = stz
         this.timestamp = ts
+        this.otherTimezones = otz
         this._freezeLocationHash = false
       })
     })
@@ -147,9 +156,6 @@ export default class App extends Vue {
     if (!this._freezeLocationHash) {
       LocationHash.toWindowLocation(new LocationHash.HashData(this.timestamp, this.sourceTimezone, this.otherTimezones))
     }
-  }
-  get localTimezone () {
-    return Timezone.MY_TIMEZONE
   }
   @Watch('sourceTimezone')
   onSourceTimezoneChanged (value: string, oldValue: string) {
