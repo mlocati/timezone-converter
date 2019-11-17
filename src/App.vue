@@ -129,6 +129,7 @@ export default class App extends Vue {
       window.addEventListener('hashchange', () => this.locationHashChanged(), false)
     })
     EventBus.$on('localeChanged', (): void => {
+      document.title = this.$i18n.t('Time Zone Converter') as string
       this._freezeLocationHash = true
       const stz = this.sourceTimezone
       const ts = this.timestamp
