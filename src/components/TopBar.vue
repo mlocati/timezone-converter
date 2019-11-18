@@ -3,6 +3,9 @@ img.locale-flag {
   width: auto;
   height: 20px;
 }
+img.locale-flag-current {
+  height: 16px;
+}
 span.locale-name {
   text-transform: capitalize;
 }
@@ -10,45 +13,38 @@ span.locale-name {
 <template>
   <div>
     <b-navbar
-      toggleable="lg"
       type="dark"
       variant="info"
     >
       <b-navbar-brand href="https://github.com/mlocati/timezone-converter">
         {{ $t('Time Zone Converter') }}
       </b-navbar-brand>
-      <b-navbar-toggle target="nav-collapse" />
-      <b-collapse
-        id="nav-collapse"
-        is-nav
-      >
-        <b-navbar-nav class="ml-auto">
-          <b-nav-item-dropdown right>
-            <template slot="button-content">
-              <img
-                class="locale-flag"
-                :src="getIconSource(getSelectedLocale())"
-              >
-              <span class="locale-name">
-                {{ getLanguageName(getSelectedLocale()) }}
-              </span>
-            </template>
-            <b-dropdown-item
-              v-for="locale in getOtherAvailableLocales()"
-              :key="locale"
-              @click.prevent="changeLocale(locale)"
+      <b-navbar-nav class="ml-auto">
+        <b-nav-item-dropdown right no-caret>
+          <template slot="button-content">
+            <img
+              class="locale-flag locale-flag-current"
+              :src="getIconSource(getSelectedLocale())"
             >
-              <img
-                class="locale-flag"
-                :src="getIconSource(locale)"
-              >
-              <span class="locale-name">
-                {{ getLanguageName(locale) }}
-              </span>
-            </b-dropdown-item>
-          </b-nav-item-dropdown>
-        </b-navbar-nav>
-      </b-collapse>
+            <span class="locale-name d-none d-sm-inline">
+              {{ getLanguageName(getSelectedLocale()) }}
+            </span>
+          </template>
+          <b-dropdown-item
+            v-for="locale in getOtherAvailableLocales()"
+            :key="locale"
+            @click.prevent="changeLocale(locale)"
+          >
+            <img
+              class="locale-flag"
+              :src="getIconSource(locale)"
+            >
+            <span class="locale-name">
+              {{ getLanguageName(locale) }}
+            </span>
+          </b-dropdown-item>
+        </b-nav-item-dropdown>
+      </b-navbar-nav>
     </b-navbar>
   </div>
 </template>
