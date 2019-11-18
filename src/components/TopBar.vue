@@ -20,7 +20,10 @@ span.locale-name {
         {{ $t('Time Zone Converter') }}
       </b-navbar-brand>
       <b-navbar-nav class="ml-auto">
-        <b-nav-item-dropdown right no-caret>
+        <b-nav-item-dropdown
+          right
+          no-caret
+        >
           <template slot="button-content">
             <img
               class="locale-flag locale-flag-current"
