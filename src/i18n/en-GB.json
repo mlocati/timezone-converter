@@ -1,0 +1,16 @@
+{
+  "Time Zone Converter": "Time Zone Converter",
+  "Source time zone": "Source time zone",
+  "Your time zone": "Your time zone",
+  "Set source date/time": "Set source date/time",
+  "- others -": "- others -",
+  "Choose a time zone": "Choose a time zone",
+  "Custom time zone": "Custom time zone",
+  "Edit": "Edit",
+  "Remove": "Remove",
+  "Copy URL": "Copy URL",
+  "Copy failed: {reason}": "Copy failed: {reason}",
+  "unknown reason": "unknown reason",
+  "Cancel": "Cancel",
+  "OK": "OK"
+}
