@@ -1,5 +1,4 @@
-import { SOURCE_LOCALE } from './Locale'
-import { lang } from 'moment'
+import { SOURCE_LOCALE, AVAILABLE_LOCALES } from './Locale'
 
 interface CldrIdentity {
   version: {
@@ -80,12 +79,10 @@ function loadTranslation (locale: string): CldrData {
 
 const EN_US = loadTranslation('en-US')
 
-const TRANSLATIONS : {[locale: string]: CldrData} = {
-  'de-DE': loadTranslation('de-DE'),
-  'el-GR': loadTranslation('el-GR'),
-  'fr-FR': loadTranslation('fr-FR'),
-  'it-IT': loadTranslation('it-IT')
-}
+const TRANSLATIONS : {[locale: string]: CldrData} = {}
+AVAILABLE_LOCALES.forEach((availableLocale: string): void => {
+  TRANSLATIONS[availableLocale] = loadTranslation(availableLocale)
+})
 
 function getTerritoryId (nameInEnUs: string): string|undefined {
   return Object.keys(EN_US.territory).find((key: string): boolean => {
