@@ -50,6 +50,14 @@
             v-model="selectedDate"
             required
           />
+          <b-input-group-append>
+            <b-button
+              variant="info"
+              @click.prevent="setMyDate"
+            >
+              <font-awesome-icon icon="crosshairs" />
+            </b-button>
+          </b-input-group-append>
         </b-input-group>
       </div>
       <div class="row mt-3">
@@ -64,6 +72,14 @@
             v-model="selectedTime"
             required
           />
+          <b-input-group-append>
+            <b-button
+              variant="info"
+              @click.prevent="setMyTime"
+            >
+              <font-awesome-icon icon="crosshairs" />
+            </b-button>
+          </b-input-group-append>
         </b-input-group>
       </div>
     </div>
@@ -192,6 +208,23 @@ export default class Configurer extends Vue {
     const timezone = Timezone.getByID(Timezone.MY_TIMEZONE)
     this.selectedTimezoneGroup = (timezone as Timezone.Timezone).group
     this.selectedTimezone = Timezone.MY_TIMEZONE
+  }
+
+  setMyDate (): void {
+    const date = new Date()
+    this.selectedDate = [
+      date.getFullYear().toString(),
+      ('0' + (date.getMonth() + 1).toString()).substr(-2),
+      ('0' + date.getDate().toString()).substr(-2)
+    ].join('-')
+  }
+
+  setMyTime (): void {
+    const date = new Date()
+    this.selectedTime = [
+      ('0' + date.getHours().toString()).substr(-2),
+      ('0' + date.getMinutes().toString()).substr(-2)
+    ].join(':')
   }
 
   emitResult (): void {
