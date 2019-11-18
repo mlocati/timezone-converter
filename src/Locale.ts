@@ -7,9 +7,14 @@ export const SOURCE_LOCALE = 'en-US'
 export const AVAILABLE_LOCALES: ReadonlyArray<string> = [
   'de-DE',
   'el-GR',
+  'en-GB',
   'fr-FR',
   'it-IT'
 ]
+
+const TERRITORY_NORMALIZER: {[territoryId: string]: string} = {
+  'UK': 'GB'
+}
 
 let browserLocale: string = detectBrowserLocale()
 let activeLocale: string = getInitialActiveLocale()
@@ -67,7 +72,10 @@ function pickBrowserLocale (browserLocales: ReadonlyArray<string>): string {
       return false
     }
     const browserLanguage = matches[1].toLowerCase()
-    const browserTerritory = typeof matches[2] === 'string' ? matches[2].toUpperCase() : ''
+    let browserTerritory = typeof matches[2] === 'string' ? matches[2].toUpperCase() : ''
+    if (TERRITORY_NORMALIZER.hasOwnProperty(browserTerritory)) {
+      browserTerritory = TERRITORY_NORMALIZER[browserTerritory]
+    }
     const browserLocale = browserTerritory === '' ? browserLanguage : `${browserLanguage}-${browserTerritory}`
     if (allAvailableLocales.indexOf(browserLocale) >= 0) {
       result = browserLocale
