@@ -34,16 +34,16 @@ span.locale-name {
             </span>
           </template>
           <b-dropdown-item
-            v-for="locale in getOtherAvailableLocales()"
-            :key="locale"
-            @click.prevent="changeLocale(locale)"
+            v-for="item in getOtherAvailableLocales()"
+            :key="item.localeId"
+            @click.prevent="changeLocale(item.localeId)"
           >
             <img
               class="locale-flag"
-              :src="getIconSource(locale)"
+              :src="getIconSource(item.localeId)"
             >
             <span class="locale-name">
-              {{ getLanguageName(locale) }}
+              {{ item.localeName }}
             </span>
           </b-dropdown-item>
         </b-nav-item-dropdown>
@@ -60,33 +60,45 @@ import EventBus from '../EventBus'
 
 @Component
 export default class TopBar extends Vue {
-  @Prop() private msg!: string
-  private getOtherAvailableLocales (): ReadonlyArray<string> {
-    const locale = getActiveLocale()
-    if (locale === SOURCE_LOCALE) {
-      return AVAILABLE_LOCALES
-    }
-    const result = [SOURCE_LOCALE].concat(AVAILABLE_LOCALES)
-    const index = result.indexOf(locale)
-    if (index < 0) {
-      return result
-    }
-    result.splice(index, 1)
-    return result
+  private getAllAvailableLanguages (): ReadonlyArray<{localeId: string, localeName: string}> {
+    const list: {localeId: string, localeName: string}[] = []
+    const allLocaleIds: string[] = [SOURCE_LOCALE].concat(AVAILABLE_LOCALES)
+    allLocaleIds.forEach((localeId: string): void => {
+      list.push({
+        localeId,
+        localeName: translateLanguageName(localeId)
+      })
+    })
+    list.sort((a, b): number => {
+      return a.localeName.localeCompare(b.localeName, 'en', { sensitivity: 'base' })
+    })
+    return list
   }
+
+  private getOtherAvailableLocales (): ReadonlyArray<{localeId: string, localeName: string}> {
+    const activeLocaleId = getActiveLocale()
+    return this.getAllAvailableLanguages().filter((item): Boolean => {
+      return item.localeId !== activeLocaleId
+    })
+  }
+
   private getSelectedLocale (): string {
     return getActiveLocale()
   }
+
   private changeLocale (locale: string): void {
     setActiveLocale(locale)
     EventBus.$emit('localeChanged')
   }
+
   public emitConfigure (): void {
     this.$emit('configure')
   }
+
   private getLanguageName (locale: string) : string {
     return translateLanguageName(locale)
   }
+
   private getIconSource (locale: string): string {
     const chunks = locale.split('-')
     return `images/flags/${chunks[1]}.svg`
