@@ -1,0 +1,39 @@
+name: Check & deploy
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checking out the repository
+        uses: actions/checkout@v1
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: build-${{ hashFiles('package-lock.json') }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+
+      - name: Install Node.js package dependencies
+        run: npm ci
+
+      - name: Check language files
+        run: |
+          npm run vue-i18n-extract -- report -v './src/**/*.vue' -l './src/i18n/*.json' -o i18n-report.json
+          grep -q '{"missingKeys":\[\],"unusedKeys":\[\]}' i18n-report.json
+
+      - name: Build generated app
+        run: npm run build
