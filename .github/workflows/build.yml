@@ -1,0 +1,59 @@
+name: Check and deploy
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+    tags-ignore:
+      - "**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      PUSH: n
+    steps:
+      - name: Checking out the repository to check the pull request
+        uses: actions/checkout@v2
+      - name: Cache npm dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+      - name: Install npm dependencies
+        run: npm ci
+      - name: Check language files
+        run: |
+          npm run vue-i18n-extract -- report -v './src/**/*.vue' -l './src/i18n/*.json' -o i18n-report.json
+          grep -q '{"missingKeys":\[\],"unusedKeys":\[\]}' i18n-report.json
+      - name: Build generated app
+        run: npm run build
+      - name: Check changed files
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master' && github.repository == 'mlocati/timezone-converter'
+        run: |
+          if test -n "$(git status --porcelain ./docs)"; then
+              echo 'Changes detected in built app'
+              git add --all ./docs
+              printf 'PUSH=y\n' >> "$GITHUB_ENV"
+            else
+              echo 'No changes detected in built app'
+            fi
+      - name: Commit and push
+        if: env.PUSH == 'y'
+        run: |
+          printf 'Configuring git... '
+          git config --local user.name 'Michele Locati'
+          git config --local user.email 'michele@locati.it'
+          echo 'done.'
+          echo 'Committing changes'
+          git commit -m '[skip ci] Automatic assets rebuilding'
+          echo 'Pushing'
+          git push
