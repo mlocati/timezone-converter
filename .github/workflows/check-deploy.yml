@@ -13,13 +13,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Checking out the repository
+      - name: Checking out the repository to check the pull request
+        if: github.event_name != 'push'
         uses: actions/checkout@v1
+
+      - name: Checking out the master branch
+        if: github.event_name == 'push'
+        uses: actions/checkout@v1
+        with:
+          ref: master
 
       - name: Cache npm dependencies
         uses: actions/cache@v1
         with:
-          path: node_modules
+          path: ~/.npm
           key: build-${{ hashFiles('package-lock.json') }}
 
       - name: Setup Node.js
