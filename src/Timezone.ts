@@ -31,7 +31,7 @@ export class Timezone {
   private get localization (): TimezoneLocalizedData {
     const localeId = getActiveLocale()
     if (!(localeId in this.localizations)) {
-      const group = this.territoryId === '' ? '' : translateTerritory(this.territoryId, localeId)
+      const group = this.territoryId === '' ? 'others' : translateTerritory(this.territoryId, localeId)
       const locality = translateExemplarCity(this.exemplarCityId, localeId)
       if (!locality) {
         translateExemplarCity(this.exemplarCityId, localeId)
@@ -58,7 +58,18 @@ export class Timezone {
 const map : { [id: string] : Timezone} = {}
 
 const all: Timezone[] = []
-
+function addUtcTimeZones() {
+  // Moment.js uses the IANA timezone database, which supports generic time zones like 'Etc/GMT+1'.
+  // However, the signs for these time zones are inverted compared to ISO 8601.
+  // For more details, see https://github.com/moment/moment-timezone/issues/167
+  for (let offset = -12; offset <= 12; offset++) {
+    const posixSign = offset <= 0 ? '+' : '-';
+    const isoSign = offset >= 0 ? '+' : '-';
+    const link = `Etc/GMT${posixSign}${Math.abs(offset)}|UTC/GMT${isoSign}${Math.abs(offset)}`;
+    moment.tz.link(link);
+  }
+}
+addUtcTimeZones()
 const ids: string[] = moment.tz.names()
 ids.forEach((id) => {
   const timezone = new Timezone(id)

@@ -136,7 +136,7 @@ export default class Configurer extends Vue {
       }
     })
     if (hasOthers) {
-      result.push({ value: '', text: this.NO_GROUP_TEXT })
+      result.push({ value: 'others', text: this.NO_GROUP_TEXT })
     }
     return result
   }
