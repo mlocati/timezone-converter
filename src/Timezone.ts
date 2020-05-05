@@ -96,8 +96,16 @@ export function getGroupedTimezones (): { [group: string] : Timezone[]} {
   })
   Object.keys(result).forEach((group: string): void => {
     result[group].sort((a: Timezone, b: Timezone): number => {
-      const na = a.locality.toLocaleLowerCase()
-      const nb = b.locality.toLocaleLowerCase()
+      var na = <any> a.locality.toLocaleLowerCase()
+      var nb = <any> b.locality.toLocaleLowerCase()
+      const xa = na.match(/^(.*)([-+]\d+(\.\d)?)$/)
+      if (xa) {
+        const xb = nb.match(new RegExp('^' + xa[1].replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '([-+]\\d+(\\.\\d)?)$'))
+        if (xb) {
+          na = parseFloat(xa[2])
+          nb = parseFloat(xb[1])
+        }
+      }
       if (na < nb) {
         return -1
       }
