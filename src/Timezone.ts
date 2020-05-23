@@ -26,6 +26,15 @@ export class Timezone {
       this.territoryId = id.substr(0, p)
       this.exemplarCityId = id.substr(p + 1)
     }
+    // Moment.js uses the IANA timezone database, which supports generic time zones like 'Etc/GMT+1'.
+    // However, the signs for these time zones are inverted compared to ISO 8601.
+    // For more details, see https://github.com/moment/moment-timezone/issues/167
+    if (this.territoryId === 'Etc') {
+      const gmt = this.exemplarCityId.match(/^GMT([-+])([1-9]\d*)$/)
+      if (gmt) {
+        this.exemplarCityId = 'GMT' + (gmt[1] === '-' ? '+' : '-') + gmt[2]
+      }
+    }
     this.localizations = {}
   }
   private get localization (): TimezoneLocalizedData {
