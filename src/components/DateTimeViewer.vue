@@ -26,11 +26,14 @@
     <b-card-footer v-if="showFooter">
       <slot name="action" />
     </b-card-footer>
+    <b-card-footer v-if="countdown">
+      {{ countdownText }}
+    </b-card-footer>
   </b-card>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator'
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import * as Timezone from '../Timezone'
 import moment from 'moment-timezone'
 
@@ -42,6 +45,10 @@ export default class DateTimeViewer extends Vue {
   private timezone!: string
   @Prop()
   private timestamp!: number
+  @Prop()
+  private countdown: boolean|undefined
+  private countdownTimer: number|null = null
+  private countdownText: string = ' '
   get timezoneDisplay () {
     const timezone = Timezone.getByID(this.timezone)
     return timezone === null ? '' : timezone.displayName
@@ -57,6 +64,35 @@ export default class DateTimeViewer extends Vue {
   }
   get showFooter () : boolean {
     return !!this.$slots.action
+  }
+  private configureCountdownTimer () : void {
+    if (this.countdown) {
+      this.updateCountdown()
+      if (this.countdownTimer === null) {
+        this.countdownTimer = setInterval(() => this.updateCountdown(), 200)
+      }
+    } else {
+      if (this.countdownTimer !== null) {
+        clearInterval(this.countdownTimer)
+        this.countdownTimer = null
+      }
+    }
+  }
+  private updateCountdown () : void {
+    this.countdownText = moment(this.timestamp * 1000).fromNow()
+  }
+  @Watch('countdown')
+  private onShowCountdownChanged () : void {
+    this.configureCountdownTimer()
+  }
+  private mounted () : void {
+    this.configureCountdownTimer()
+  }
+  private destroyed () : void {
+    if (this.countdownTimer !== null) {
+      clearInterval(this.countdownTimer)
+      this.countdownTimer = null
+    }
   }
 }
 </script>

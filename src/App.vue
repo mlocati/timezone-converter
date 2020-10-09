@@ -30,6 +30,7 @@
             :title="$t('Your time zone')"
             :timezone="localTimezone"
             :timestamp="timestamp"
+            :countdown="true"
           />
           <DateTimeViewer
             v-for="(otherTimezone, otherTimezoneIndex) in otherTimezones"
