@@ -12,6 +12,5 @@
   "Copy failed: {reason}": "Échec de la copie: {raison}",
   "unknown reason": "raison inconnue",
   "Cancel": "Annuler",
-  "OK": "OK",
-  "Countdown": "Countdown"
+  "OK": "OK"
 }
