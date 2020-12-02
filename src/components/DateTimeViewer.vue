@@ -19,6 +19,7 @@
           {{ timeDisplay }}
         </div>
         <div class="date-display">
+          {{ weekdayName }}<br />
           {{ dateDisplay }}
         </div>
       </b-card-text>
@@ -61,6 +62,9 @@ export default class DateTimeViewer extends Vue {
   }
   get dateDisplay () : string {
     return this.moment.format('LL')
+  }
+  get weekdayName () : string {
+    return this.moment.format('dddd')
   }
   get showFooter () : boolean {
     return !!this.$slots.action
