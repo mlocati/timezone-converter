@@ -16,9 +16,9 @@ jobs:
     env:
       PUSH: n
     steps:
-      - name: Checking out the repository to check the pull request
+      - name: Checkout
         uses: actions/checkout@v2
-      - name: Cache npm dependencies
+      - name: Configure NPM cache
         uses: actions/cache@v2
         with:
           path: ~/.npm
